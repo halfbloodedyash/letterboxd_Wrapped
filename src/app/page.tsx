@@ -210,23 +210,60 @@ export default function Home() {
   // Upload Screen
   if (phase === 'upload') {
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center px-4 bg-black">
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-4xl md:text-5xl font-bold text-white mb-4 text-center"
-        >
-          Letterboxd Wrapped
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-white/50 mb-8 text-center"
-        >
-          Your year in cinema, beautifully visualized
-        </motion.p>
-        <FileUpload onFileSelect={handleFileSelect} isLoading={isLoading} />
+      <main className="min-h-screen flex flex-col bg-[#14181c] text-white overflow-hidden">
+        {/* Top Half: Hero */}
+        <div className="h-[50vh] flex flex-col items-center justify-center relative p-8">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#14181c] via-[#14181c] to-transparent z-0 opacity-50"></div>
+          {/* Animated Letterboxd-style dots */}
+          <div className="flex gap-3 mb-6 relative z-10">
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.1, type: "spring", stiffness: 300 }}
+              className="w-5 h-5 rounded-full bg-[#00e054] shadow-lg shadow-[#00e054]/30"
+            />
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
+              className="w-5 h-5 rounded-full bg-[#ff8000] shadow-lg shadow-[#ff8000]/30"
+            />
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.3, type: "spring", stiffness: 300 }}
+              className="w-5 h-5 rounded-full bg-[#40bcf4] shadow-lg shadow-[#40bcf4]/30"
+            />
+          </div>
+          <motion.h1
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-3 text-center tracking-tighter relative z-10"
+          >
+            Letterboxd <span className="text-[#00e054]">Wrapped</span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+            className="text-[#9ab] text-lg md:text-xl text-center relative z-10 max-w-xl"
+          >
+            Transform your Letterboxd data into a stunning, personalized year-in-review experience
+          </motion.p>
+        </div>
+
+        {/* Bottom Half: Upload */}
+        <div className="flex-1 flex flex-col items-center justify-start pt-4 px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+            className="w-full max-w-2xl"
+          >
+            <FileUpload onFileSelect={handleFileSelect} isLoading={isLoading} />
+          </motion.div>
+        </div>
         {error && <p className="text-red-400 mt-6 text-sm">{error}</p>}
       </main>
     );

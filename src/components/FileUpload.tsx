@@ -306,39 +306,22 @@ export function FileUpload({ onFileSelect, isLoading }: FileUploadProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="max-w-xl mx-auto"
+            className="max-w-md mx-auto w-full flex flex-col gap-8"
         >
-            <label
-                onDrop={handleDrop}
-                onDragOver={(e) => e.preventDefault()}
-                className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-purple-500/30 rounded-2xl cursor-pointer bg-cinema-card/50 hover:bg-cinema-card hover:border-purple-500/50 transition-all duration-300 group"
-            >
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <div className="p-4 rounded-full bg-purple-500/10 mb-4 group-hover:bg-purple-500/20 transition-colors">
-                        <Upload className="w-10 h-10 text-purple-400" />
-                    </div>
-                    <p className="mb-2 text-lg text-gray-300">
-                        {isLoading ? 'Processing...' : 'Drop your Letterboxd export here'}
-                    </p>
-                    <p className="text-sm text-gray-500 mb-2">
-                        Accepts ZIP or diary.csv
-                    </p>
-                    <p className="text-sm text-gray-500">
-                        Export from{' '}
-                        <a
-                            href="https://letterboxd.com/settings/data/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-purple-400 hover:underline"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            letterboxd.com/settings/data
-                        </a>
-                    </p>
-                    {error && (
-                        <p className="text-red-400 text-sm mt-3">{error}</p>
-                    )}
+            {/* Simple Upload Button */}
+            <label className="flex flex-col items-center justify-center cursor-pointer group">
+                <div className="w-full py-4 px-8 bg-[#00e054] hover:bg-[#00c94a] rounded-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-[#00e054]/30 group-hover:scale-[1.02]">
+                    <Upload className="w-5 h-5 text-[#14181c]" />
+                    <span className="text-[#14181c] font-bold text-lg">
+                        {isLoading ? 'Processing...' : 'Upload Your Data'}
+                    </span>
                 </div>
+                <p className="text-[#9ab] text-xs mt-3 font-medium">
+                    Accepts <span className="text-white">.zip</span> or <span className="text-white">diary.csv</span>
+                </p>
+                {error && (
+                    <p className="text-[#ff8000] text-sm mt-3 font-bold bg-[#ff8000]/10 px-4 py-1.5 rounded-full">{error}</p>
+                )}
                 <input
                     type="file"
                     className="hidden"
@@ -347,6 +330,25 @@ export function FileUpload({ onFileSelect, isLoading }: FileUploadProps) {
                     disabled={isLoading}
                 />
             </label>
+
+            {/* How to Use Section */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+                className="bg-[#1c2229] border border-[#2c3440] rounded-xl p-6"
+            >
+                <h3 className="text-white font-bold text-sm mb-4 flex items-center gap-2">
+                    <span className="w-5 h-5 bg-[#00e054] rounded-full flex items-center justify-center text-[#14181c] text-xs font-bold">?</span>
+                    How to get your data
+                </h3>
+                <ol className="text-[#9ab] space-y-3 text-sm list-decimal list-inside marker:text-[#40bcf4] font-medium">
+                    <li>Go to <a href="https://letterboxd.com/settings/data/" target="_blank" rel="noopener noreferrer" className="text-[#00e054] hover:underline">letterboxd.com/settings/data</a></li>
+                    <li>Click <strong className="text-white">Export Your Data</strong></li>
+                    <li>Download the <span className="text-[#00e054]">.zip</span> file</li>
+                    <li>Click the button above and select it</li>
+                </ol>
+            </motion.div>
         </motion.div>
     );
 }
