@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Letterboxd Wrapped | Your Year in Cinema",
+  title: "Letterboxd Wrapped",
   description: "Transform your Letterboxd data into a cinematic year-in-review experience.",
 };
 
