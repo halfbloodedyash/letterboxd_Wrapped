@@ -137,7 +137,7 @@ export default function Home() {
         watchlist,
         reviewPersona,
       });
-      setPhase('countdown');
+      setPhase('curtains');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to parse file');
     } finally {
@@ -290,13 +290,15 @@ export default function Home() {
   return (
     <div className="fixed inset-0 bg-black overflow-hidden">
       {/* Particles Background */}
-      <Particles
-        className="absolute inset-0 z-0"
-        quantity={80}
-        ease={80}
-        color="#ffffff"
-        refresh
-      />
+      <div className="absolute inset-0 w-full h-full z-0">
+        <Particles
+          className=""
+          quantity={80}
+          ease={80}
+          color="#ffffff"
+          refresh
+        />
+      </div>
 
       {/* Progress bars */}
       <div className="absolute top-0 left-0 right-0 z-20 flex gap-1 p-4">
@@ -311,7 +313,7 @@ export default function Home() {
       </div>
 
       {/* Control buttons */}
-      <div className="absolute top-4 right-4 z-20 flex items-center gap-3">
+      <div className="absolute top-8 right-6 z-20 flex items-center gap-5">
         <MusicToggleButton
           audioSrc="https://res.cloudinary.com/dainr14h7/video/upload/v1767433797/Bryce_Dessner_-_The_Great_Mystery_kfyuup.flac"
           autoPlay={true}
@@ -998,14 +1000,56 @@ function buildSlides(data: WrappedData): React.ReactNode[] {
         onClick={async () => {
           const card = document.getElementById('summary-card');
           if (card) {
-            const canvas = await html2canvas(card, {
-              backgroundColor: '#14181c',
-              scale: 2,
-            });
-            const link = document.createElement('a');
-            link.download = `letterboxd-wrapped-${data.year}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
+            try {
+              const canvas = await html2canvas(card, {
+                backgroundColor: '#14181c',
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                onclone: (clonedDoc) => {
+                  // Fix oklab color issues by converting all colors to hex
+                  const fixColors = (el: Element) => {
+                    const htmlEl = el as HTMLElement;
+                    if (htmlEl.style) {
+                      // Set explicit colors to avoid oklab parsing
+                      const computed = window.getComputedStyle(htmlEl);
+
+                      // Convert colors to safe hex values
+                      const bgColor = computed.backgroundColor;
+                      if (bgColor && bgColor !== 'rgba(0, 0, 0, 0)' && bgColor !== 'transparent') {
+                        htmlEl.style.backgroundColor = bgColor.includes('oklab') ? '#1a1f25' : bgColor;
+                      }
+
+                      const textColor = computed.color;
+                      if (textColor) {
+                        htmlEl.style.color = textColor.includes('oklab') ? '#ffffff' : textColor;
+                      }
+
+                      const borderColor = computed.borderColor;
+                      if (borderColor) {
+                        htmlEl.style.borderColor = borderColor.includes('oklab') ? 'rgba(255,255,255,0.1)' : borderColor;
+                      }
+                    }
+
+                    // Process children
+                    Array.from(el.children).forEach(child => fixColors(child));
+                  };
+
+                  const clonedCard = clonedDoc.getElementById('summary-card');
+                  if (clonedCard) {
+                    clonedCard.style.background = 'linear-gradient(to bottom right, #1a1f25, #14181c)';
+                    fixColors(clonedCard);
+                  }
+                },
+              });
+              const link = document.createElement('a');
+              link.download = `letterboxd-wrapped-${data.year}.png`;
+              link.href = canvas.toDataURL('image/png');
+              link.click();
+            } catch (err) {
+              console.error('Download failed:', err);
+              alert('Download failed. Please try taking a screenshot instead.');
+            }
           }
         }}
         className="mt-6 flex items-center gap-2 bg-[#00e054] hover:bg-[#00c94a] text-[#14181c] font-bold py-3 px-6 rounded-lg transition-all hover:scale-105"
@@ -1039,9 +1083,17 @@ function buildSlides(data: WrappedData): React.ReactNode[] {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
-        className="text-white/30 text-sm"
+        className="text-white/30 text-lg"
       >
-        Made with Letterboxd Wrapped
+        Made by{' '}
+        <a
+          href="https://x.com/eth_yash"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-white/50 hover:text-white underline transition-colors"
+        >
+          yash
+        </a>
       </motion.p>
     </div>,
   ];

@@ -247,7 +247,7 @@ export function Particles({
     return (
         <canvas
             ref={(el) => { canvasRef.current = el; }}
-            className={className}
+            className={`w-full h-full ${className}`}
         />
     );
 }
