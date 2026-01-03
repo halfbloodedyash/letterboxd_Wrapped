@@ -42,7 +42,7 @@ OUTPUT FORMAT (STRICT JSON)
 Return ONLY valid JSON in this exact format:
 {
   "title": "2-4 word evocative persona title (e.g., 'The Reflective Observer')",
-  "summary": "80-120 word paragraph speaking directly to user ('You...'), describing how they watch and write about films. Warm, perceptive, specific. No clichés.",
+  "summary": "20-30 word tagline speaking directly to user ('You...'), capturing their essence as a film viewer. One to two sentences maximum. Punchy and memorable.",
   "signals": ["3-5 observable patterns from reviews, e.g., 'Frequently praises visual craft'", "second signal", "third signal"]
 }
 

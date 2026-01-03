@@ -13,6 +13,8 @@ import Particles from '@/components/Particles';
 import SparklesText from '@/components/SparklesText';
 import AuroraText from '@/components/AuroraText';
 import GradientText from '@/components/GradientText';
+import { Download } from 'lucide-react';
+import html2canvas from 'html2canvas';
 import {
   parseCSV,
   detectTargetYear,
@@ -791,7 +793,7 @@ function buildSlides(data: WrappedData): React.ReactNode[] {
 
     // 9. Review Persona slide - AI-generated persona from reviews
     ...(data.reviewPersona ? [
-      <div key="review-persona" className="text-center flex flex-col items-center px-6 max-w-lg">
+      <div key="review-persona" className="text-center flex flex-col items-center justify-center px-6 max-w-lg">
         <motion.p
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -804,7 +806,7 @@ function buildSlides(data: WrappedData): React.ReactNode[] {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.2, type: "spring" }}
-          className="text-3xl md:text-4xl font-bold mb-6"
+          className="text-4xl md:text-5xl font-bold mb-6"
         >
           <GradientText
             colors={["#60a5fa", "#a855f7", "#ec4899", "#60a5fa"]}
@@ -814,30 +816,14 @@ function buildSlides(data: WrappedData): React.ReactNode[] {
             {data.reviewPersona.title}
           </GradientText>
         </motion.h2>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="w-full space-y-4"
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+          className="text-white/60 text-lg md:text-xl leading-relaxed italic"
         >
-          {data.reviewPersona.signals.map((signal, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, x: -20, scale: 0.95 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              transition={{
-                duration: 0.5,
-                delay: 0.6 + index * 0.8, // Slow staggered entrance
-                type: "spring",
-                stiffness: 100
-              }}
-              className="flex items-center gap-3 bg-white/5 rounded-xl px-5 py-3 border border-white/5"
-            >
-              <span className="text-amber-400 text-xl font-bold">•</span>
-              <span className="text-white/90 text-sm font-medium text-left leading-relaxed">{signal}</span>
-            </motion.div>
-          ))}
-        </motion.div>
+          "{data.reviewPersona.summary}"
+        </motion.p>
       </div>
     ] : data.reviews && data.reviews.length > 0 ? [
       // Fallback to regular reviews if persona not available
@@ -938,7 +924,98 @@ function buildSlides(data: WrappedData): React.ReactNode[] {
       </div>
     ] : []),
 
-    // 11. Outro - Fade in sequence with SparklesText
+    // 12. Summary Slide - Beautiful recap with download
+    <div key="summary" className="text-center flex flex-col items-center px-6 max-w-md w-full">
+      <motion.p
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="text-white/50 text-sm tracking-widest uppercase mb-6"
+      >
+        YOUR {data.year} RECAP
+      </motion.p>
+
+      {/* Summary Card */}
+      <motion.div
+        id="summary-card"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+        className="w-full bg-gradient-to-br from-[#1a1f25] to-[#14181c] rounded-2xl p-6 border border-white/10 shadow-2xl"
+      >
+        {/* Header */}
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <div className="w-3 h-3 rounded-full bg-[#00e054]"></div>
+          <div className="w-3 h-3 rounded-full bg-[#ff8000]"></div>
+          <div className="w-3 h-3 rounded-full bg-[#40bcf4]"></div>
+        </div>
+        <h3 className="text-white font-bold text-xl mb-1">{data.username || 'Letterboxd'}</h3>
+        <p className="text-[#00e054] text-sm font-medium mb-6">Wrapped {data.year}</p>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="bg-white/5 rounded-xl p-4">
+            <p className="text-3xl font-bold text-white">{data.stats.totalFilms}</p>
+            <p className="text-white/50 text-xs uppercase">Films</p>
+          </div>
+          <div className="bg-white/5 rounded-xl p-4">
+            <p className="text-3xl font-bold text-white">{data.stats.totalHours}</p>
+            <p className="text-white/50 text-xs uppercase">Hours</p>
+          </div>
+          <div className="bg-white/5 rounded-xl p-4">
+            <p className="text-3xl font-bold text-[#00e054]">{(data.stats.avgRating || 0).toFixed(1)}</p>
+            <p className="text-white/50 text-xs uppercase">Avg Rating</p>
+          </div>
+          <div className="bg-white/5 rounded-xl p-4">
+            <p className="text-3xl font-bold text-[#ff8000]">{data.genreDistribution?.[0]?.genre || '-'}</p>
+            <p className="text-white/50 text-xs uppercase">Top Genre</p>
+          </div>
+        </div>
+
+        {/* Archetype */}
+        <div className="border-t border-white/10 pt-4">
+          <p className="text-white/40 text-xs uppercase mb-1">Your Archetype</p>
+          <p className="text-white font-bold text-lg">{data.archetype.name}</p>
+        </div>
+
+        {/* Persona (if available) */}
+        {data.reviewPersona && (
+          <div className="border-t border-white/10 pt-4 mt-4">
+            <p className="text-white/40 text-xs uppercase mb-1">Review Persona</p>
+            <p className="text-[#a855f7] font-bold text-lg">{data.reviewPersona.title}</p>
+          </div>
+        )}
+
+        {/* Branding */}
+        <p className="text-white/20 text-[10px] mt-6 uppercase tracking-widest">letterboxd wrapped</p>
+      </motion.div>
+
+      {/* Download Button */}
+      <motion.button
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        onClick={async () => {
+          const card = document.getElementById('summary-card');
+          if (card) {
+            const canvas = await html2canvas(card, {
+              backgroundColor: '#14181c',
+              scale: 2,
+            });
+            const link = document.createElement('a');
+            link.download = `letterboxd-wrapped-${data.year}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+          }
+        }}
+        className="mt-6 flex items-center gap-2 bg-[#00e054] hover:bg-[#00c94a] text-[#14181c] font-bold py-3 px-6 rounded-lg transition-all hover:scale-105"
+      >
+        <Download className="w-5 h-5" />
+        Download Your Recap
+      </motion.button>
+    </div>,
+
+    // 13. Outro - Fade in sequence with SparklesText
     <div key="outro" className="text-center">
       <motion.p
         initial={{ opacity: 0 }}
