@@ -267,6 +267,103 @@ export default function Home() {
           </motion.div>
         </div>
         {error && <p className="text-red-400 mt-6 text-sm">{error}</p>}
+
+        {/* SEO Content Section */}
+        <section className="w-full max-w-5xl mx-auto px-8 py-20">
+          {/* Divider */}
+          <div className="flex items-center gap-4 mb-16">
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            <div className="flex gap-1.5">
+              <div className="w-2 h-2 rounded-full bg-[#00e054]/60" />
+              <div className="w-2 h-2 rounded-full bg-[#ff8000]/60" />
+              <div className="w-2 h-2 rounded-full bg-[#40bcf4]/60" />
+            </div>
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+          </div>
+
+          {/* Main Content Grid */}
+          <div className="grid md:grid-cols-2 gap-12 md:gap-16">
+            {/* Left Column */}
+            <div className="space-y-10">
+              <article>
+                <h2 className="text-lg font-medium text-white/90 mb-3 tracking-wide">What is Letterboxd Wrapped?</h2>
+                <p className="text-[#789] text-sm leading-relaxed">
+                  A free tool that transforms your Letterboxd diary into a cinematic year-in-review.
+                  Inspired by Spotify Wrapped, it analyzes your viewing history to create beautiful,
+                  shareable slides highlighting your most memorable moments in film.
+                </p>
+              </article>
+
+              <article>
+                <h2 className="text-lg font-medium text-white/90 mb-3 tracking-wide">Your Personal Stats</h2>
+                <p className="text-[#789] text-sm leading-relaxed">
+                  Discover how many films you watched, hours spent in the dark, and your favorite movie night.
+                  See your genre breakdown, rating style, and whether you're a generous reviewer or a harsh critic.
+                </p>
+              </article>
+
+              <article>
+                <h2 className="text-lg font-medium text-white/90 mb-3 tracking-wide">Visual Stories</h2>
+                <p className="text-[#789] text-sm leading-relaxed">
+                  Cinematic animations, dynamic charts, and elegant typography bring your year to life.
+                  The full-screen story format is perfect for sharing on Instagram, Twitter, and TikTok.
+                </p>
+              </article>
+            </div>
+
+            {/* Right Column */}
+            <div className="space-y-10">
+              <article>
+                <h2 className="text-lg font-medium text-white/90 mb-3 tracking-wide">Cinema Personality</h2>
+                <p className="text-[#789] text-sm leading-relaxed">
+                  Beyond numbers, discover your unique archetype. Are you a Binge Watcher, Classics Connoisseur,
+                  or Weekend Warrior? Your personalized profile captures your relationship with film.
+                </p>
+              </article>
+
+              <article>
+                <h2 className="text-lg font-medium text-white/90 mb-3 tracking-wide">AI Review Analysis</h2>
+                <p className="text-[#789] text-sm leading-relaxed">
+                  If you write reviews, our AI examines your style to uncover your critic persona.
+                  We identify patterns in how you discuss cinematography, storytelling, and themes.
+                </p>
+              </article>
+
+              <article>
+                <h2 className="text-lg font-medium text-white/90 mb-3 tracking-wide">How It Works</h2>
+                <p className="text-[#789] text-sm leading-relaxed">
+                  Export your Letterboxd data as a CSV, upload it here, and watch the magic happen.
+                  Your data stays private — processing happens entirely in your browser.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="w-full border-t border-white/5 py-10 mt-8">
+          <div className="max-w-5xl mx-auto px-8">
+            <div className="flex flex-col items-center gap-4">
+              {/* Letterboxd dots */}
+              <div className="flex gap-1.5">
+                <div className="w-2 h-2 rounded-full bg-[#00e054]" />
+                <div className="w-2 h-2 rounded-full bg-[#ff8000]" />
+                <div className="w-2 h-2 rounded-full bg-[#40bcf4]" />
+              </div>
+
+              {/* Made with love */}
+              <p className="text-white/40 text-sm">
+                Made with <span className="text-red-400">♥</span> for the cinephile, from another cinephile
+              </p>
+              <p className="text-white/60 text-sm font-medium tracking-wide">— Yash</p>
+
+              {/* Disclaimer */}
+              <p className="text-white/20 text-xs mt-4">
+                Not affiliated with Letterboxd Ltd.
+              </p>
+            </div>
+          </div>
+        </footer>
       </main>
     );
   }
